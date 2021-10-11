@@ -1,0 +1,176 @@
+    <link rel="stylesheet" href="/style?for=app" type="text/css"/>
+
+<div class="box">
+
+    <button onclick="a()" class="btnfos btnfos-1" style="margin-left:20px;
+  margin-top:6px;">
+      <svg>
+        <rect x="0" y="0" fill="none" width="100%" height="100%"/>
+      </svg>
+<a>
+   Funds
+      </a>
+    </button>
+
+
+    <button onclick="o()" class="btnfos btnfos-3"><span>Orders</span></button> 
+
+
+    <div class="btnfos btnfos-2"> <div id="funds" style="margin-left:60px;">
+   
+      </div></div> 
+ <div id="FundsSystem">
+  
+  </div>
+ <div id="OrdersSystem">
+  
+  </div>
+    </div> 
+
+
+  
+<script>
+const money = document.getElementById('funds')
+const FundsSystem = document.getElementById('FundsSystem')
+const OrdersSystem = document.getElementById('OrdersSystem')
+
+var boxFunds = false
+var boxOrders = false
+
+const o = async () =>{
+
+if(boxOrders === false){
+
+if(boxFunds === true){
+  OrdersSystem.innerHTML = `
+
+<br><br> 
+<div class="boxOrders" style="margin-top:-185px;">
+    <button onclick="window.location.replace('/app/orders/add')" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>New Order</span></button> 
+    <button onclick="window.location.replace('/app/orders/history')" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>History</span></button> 
+
+</div>`
+return boxOrders = true
+
+}
+OrdersSystem.innerHTML = `
+
+<br><br> 
+<div class="boxOrders">
+    <button onclick="window.location.replace('/app/orders/add')" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>New Order</span></button> 
+    <button onclick="window.location.replace('/app/orders/history')" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>History</span></button> 
+
+</div>`
+boxOrders = true
+}else{
+boxOrders = false
+OrdersSystem.innerHTML = ``
+}
+
+}
+
+const a = async () =>{
+
+if(boxFunds === false){
+
+if(boxOrders === true) OrdersSystem.innerHTML = `
+
+<br><br> 
+<div class="boxOrders" style="margin-top:-185px;">
+    <button onclick="window.location.replace('/app/orders/add')" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>New Order</span></button> 
+    <button onclick="window.location.replace('/app/orders/history')" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>History</span></button> 
+
+</div>`
+
+FundsSystem.innerHTML = `
+
+<br><br> 
+<div class="boxFunds">
+    <button onclick="r()" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>Add Funds</span></button> 
+    <button onclick="window.location.replace('/app/funds/history')" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>History</span></button> 
+
+</div>`
+boxFunds = true
+}else{
+console.log(boxOrders)
+if(boxOrders === true) OrdersSystem.innerHTML = `
+
+<br><br> 
+<div class="boxOrders">
+    <button onclick="window.location.replace('/app/orders/add')" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>New Order</span></button> 
+    <button onclick="window.location.replace('/app/orders/history')" class="btnfos btnfos-3" style="background-color: #343434; 
+margin-left:20px;"><span>History</span></button> 
+
+</div>`
+boxFunds = false
+
+FundsSystem.innerHTML = ``
+}
+//  window.location.replace('/app/addfunds')
+
+}
+
+const r = async () =>{
+alert('Join discord.gg/teamlog Go To Room addfunds\nsay addfunds')
+}
+
+const m = async (d) =>{
+money.innerHTML = `$${d.pay}`
+}
+
+const p = async (data) =>{
+if(data && data.message && data.message === "Failed authorization"){
+  window.location.replace('/login')
+localStorage.removeItem('token');
+}else{
+m(data)
+}
+
+}
+
+const request = async (data, method, body, headers)=>{
+return await new Promise(async (res , rej) =>{
+headers['content-type'] = 'application/json'
+if(method === "G") method = "GET"
+if(method === "P") method = "post"
+if(method === "PU") method = "PUT"
+if(method === "PA") method = "PATCH"
+if(method === "D") method = "DELETE"
+
+if(method === "GET" || method === "DELETE"){
+
+let dataFetch = await fetch(('/api/v1' + data), {method: method, headers: headers})
+let dataJson = await dataFetch.json()
+p(dataJson)
+res(dataJson)
+
+}else{
+
+let dataFetch = await fetch(('/api/v1' + data), {method: method, body: JSON.stringify(data), headers: headers})
+let dataJson = await dataFetch.json()
+p(dataJson)
+res(dataJson)
+
+}
+})
+}
+
+const s = async () =>{
+if(!localStorage.getItem('token')){
+window.location.replace('/login')
+}else{
+await request('/users/@me', 'G', {}, {authorization: localStorage.getItem('token')})
+}}
+
+s()
+
+</script>

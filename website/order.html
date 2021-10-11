@@ -1,0 +1,99 @@
+    <link rel="stylesheet" href="/style?for=add-order" type="text/css"/>
+
+<div class="box">
+  
+<h1 class="onlineOrOffline">
+You Need Online Or Offline? (o/f)
+  </h1>
+<br><br>
+  <input value="" id="type" type="text" class="typeInput"> 
+<h1 class="members">
+Members Count
+  </h1>
+<br><br>
+  <input value="" id="members" type="text" class="membersInput"> 
+
+<h1 class="link">
+Server Link (ForEver)
+  </h1>
+<br><br>
+  <input value="" id="link" type="text" class="linkInput"> 
+
+<br><br>
+<div class="addOrder">
+  <button id="Login" onclick="a()" class="btn"> New Order </button>
+  </div>
+  
+</div>
+
+<script>
+
+setInterval(async () => {
+const members = document.getElementById('members').value
+const type = document.getElementById('type').value
+if(type !== "o" && type !== "f") document.getElementById('type').value = ""
+if(!Number(members) || members.includes('e') || members.includes('+') || members.includes('.') || members.includes('-')) document.getElementById('members').value = ""
+}, 0)
+
+const p = async (data) =>{
+if(data && data.message && data.message === "Failed authorization"){
+  window.location.replace('/login')
+localStorage.removeItem('token');
+}else{
+
+}
+
+}
+
+const a = async () =>{
+var members = document.getElementById('members').value
+var type = document.getElementById('type').value
+var link = document.getElementById('link').value
+
+let bodyData = {
+membersCount: Number(members),
+membersType: type,
+link
+}
+let data = await request('/order', 'P', bodyData, {authorization: localStorage.getItem('token')})
+if(data.errMessage) return alert(data.errMessage)
+alert('success')
+}
+
+const request = async (data, method, body, headers)=>{
+return await new Promise(async (res , rej) =>{
+headers['content-type'] = 'application/json'
+if(method === "G") method = "GET"
+if(method === "P") method = "post"
+if(method === "PU") method = "PUT"
+if(method === "PA") method = "PATCH"
+if(method === "D") method = "DELETE"
+
+if(method === "GET" || method === "DELETE"){
+
+let dataFetch = await fetch(('/api/v1' + data), {method: method, headers: headers})
+let dataJson = await dataFetch.json()
+p(dataJson)
+res(dataJson)
+
+}else{
+
+let dataFetch = await fetch(('/api/v1' + data), {method: method, body: JSON.stringify(body), headers: headers})
+let dataJson = await dataFetch.json()
+p(dataJson)
+res(dataJson)
+
+}
+})
+}
+
+const s = async () =>{
+if(!localStorage.getItem('token')){
+window.location.replace('/login')
+}else{
+await request('/users/@me', 'G', {}, {authorization: localStorage.getItem('token')})
+}}
+
+s()
+
+</script>

@@ -1,0 +1,180 @@
+    <link rel="stylesheet" href="/style?for=login" type="text/css"/>
+      <script src="https://hcaptcha.com/1/api.js" async defer></script>
+
+<div id="edit_color_div">
+</div>
+<div id="allLogin">
+  
+</div>
+
+<div id="captcha">
+
+</div>
+<script>
+var color = ""
+let div_editcolor = document.getElementById('edit_color_div')
+
+div_editcolor.innerHTML = `
+<label class="switch">
+  <input type="checkbox" id="edit_color">
+<span class="slider"></span>
+</label>`
+
+let allLogin = document.getElementById('allLogin')
+
+allLogin.innerHTML = `<div class="login">
+<h1 class="email"> Email </h1>
+  <input value="" id="email" type="text" class="emailInput"> 
+<h1 class="password"> Password </h1>
+  <input value="" id="password" type="password" class="passwordInput"> 
+<br><br>
+<div class="loginbutton">
+  <button id="Login" onclick="g()" class="btn">  Login </button>
+  </div>
+  
+</div>`
+
+const g = async ()=>{
+allLogin.innerHTML = `<div class="login">
+<h1 class="email"> Email </h1>
+  <input value="${document.getElementById('email').value}" id="email" type="text" class="emailInput"> 
+<h1 class="password"> Password </h1>
+  <input value="${document.getElementById('password').value}" id="password" type="password" class="passwordInput"> 
+<br><br>
+<div class="loginbutton">
+  <button id="Login" onclick="g()" class="btn">  Login </button>
+  </div>
+  
+</div>`
+let bodyData = {
+email: document.getElementById('email').value,
+password: document.getElementById('password').value
+}
+let getData = await fetch(('/api/v1/login'), {method: "post", body: JSON.stringify(bodyData), headers: {'Content-Type': 'application/json'}})
+let data = await getData.json()
+l(data, bodyData)
+}
+
+const t = async (token) =>{
+if(token) window.location.replace('/app')
+}
+
+const l = async (data, bodyData) =>{
+if(data.errors){
+if(data.errors[0].email){
+return m(data)
+}
+if(data.errors[0].password){
+return p(data)
+}
+if(data.errors[0].captcha){
+return c(data, bodyData)
+}
+}
+if(data.token){
+localStorage.setItem('token', data.token);
+t(localStorage.getItem('token'))
+}
+
+
+}
+const m = async (data) =>{
+allLogin.innerHTML = `<div class="login">
+<h1 class="email"> Email </h1>
+  <input value="${document.getElementById('email').value}" id="email" type="text" class="emailInput" style="border: solid 1px #FF000C;"> 
+
+<h1 class="errorEmail"> ${data.errors[0].email.message} </h1>
+
+<h1 class="password"> Password </h1>
+  <input value="${document.getElementById('password').value}" id="password" type="password" class="passwordInput"> 
+<br><br>
+<div class="loginbutton">
+  <button id="Login" onclick="g()" class="btn">  Login </button>
+  </div>
+  
+</div>`
+}
+
+const p = async (data) =>{
+allLogin.innerHTML = `<div class="login">
+<h1 class="email"> Email </h1>
+  <input value="${document.getElementById('email').value}" id="email" type="text" class="emailInput"> 
+
+
+<h1 class="password"> Password </h1>
+  <input value="${document.getElementById('password').value}" id="password" type="password" class="passwordInput" style="border: solid 1px #FF000C;"> 
+<h1 class="errorPassword"> ${data.errors[0].password.message} </h1>
+
+<br><br><br><br>
+<div class="loginbutton">
+  <button id="Login" onclick="g()" class="btn">  Login </button>
+  </div>
+  
+</div>`
+}
+
+const c = async (data, bodyData) =>{
+var captcha = document.getElementById('captcha')
+
+var email = document.getElementById('email').value
+var password = document.getElementById('password').value
+ allLogin.innerHTML = ``
+document.body.style.background = "#201919";
+div_editcolor.innerHTML = ``
+captcha.innerHTML = `<div class="captchaBox">
+<div id="captcha-2" style="margin-top: 60px;
+margin-left:82px;">`
+let widgetID1 = hcaptcha.render('captcha-2', {
+'sitekey' : data.errors[0].captcha.sitekey,
+'callback': (message) => lv(message),
+'theme': "dark",
+})
+
+async function lv(captchaKey){
+var captcha2 = document.getElementById('captcha-2')
+captcha2.innerHTML = ``
+captcha.innerHTML = ``
+document.body.style.background = color;
+div_editcolor.innerHTML = `
+<label class="switch">
+  <input type="checkbox" id="edit_color">
+<span class="slider"></span>
+</label>`
+
+allLogin.innerHTML = `<div class="login">
+<h1 class="email"> Email </h1>
+  <input value="${email}" id="email" type="text" class="emailInput"> 
+
+<h1 class="password"> Password </h1>
+  <input value="${password}" id="password" type="password" class="passwordInput"> 
+<br><br>
+<div class="loginbutton">
+  <div id="Login" class="btn">  ... </div>
+  </div>
+  
+</div>
+`
+bodyData.captcha = captchaKey
+let getData = await fetch(('/api/v1/login'), {method: "post", body: JSON.stringify(bodyData), headers: {'Content-Type': 'application/json'}})
+let data = await getData.json()
+l(data, bodyData)
+}
+  
+}
+
+const e =  () =>{
+const checkbox = document.getElementById('edit_color')
+checkbox.onchange = () => {
+if(checkbox.checked) {
+color = "#1C1B1B"
+document.body.style.background = "#1C1B1B";
+}
+if(!checkbox.checked){
+color = "#FFFFFF"
+document.body.style.background = "#FFFFFF";
+}
+
+}}
+e()
+t(localStorage.getItem('token'))
+</script>

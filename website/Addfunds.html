@@ -1,0 +1,50 @@
+    <link rel="stylesheet" href="/style?for=app" type="text/css"/>
+<script>
+
+const p = async (data) =>{
+if(data && data.message && data.message === "Failed authorization"){
+  window.location.replace('/login')
+localStorage.removeItem('token');
+}else{
+
+}
+
+}
+
+const request = async (data, method, body, headers)=>{
+return await new Promise(async (res , rej) =>{
+headers['content-type'] = 'application/json'
+if(method === "G") method = "GET"
+if(method === "P") method = "post"
+if(method === "PU") method = "PUT"
+if(method === "PA") method = "PATCH"
+if(method === "D") method = "DELETE"
+
+if(method === "GET" || method === "DELETE"){
+
+let dataFetch = await fetch(('/api/v1' + data), {method: method, headers: headers})
+let dataJson = await dataFetch.json()
+p(dataJson)
+res(dataJson)
+
+}else{
+
+let dataFetch = await fetch(('/api/v1' + data), {method: method, body: JSON.stringify(data), headers: headers})
+let dataJson = await dataFetch.json()
+p(dataJson)
+res(dataJson)
+
+}
+})
+}
+
+const s = async () =>{
+if(!localStorage.getItem('token')){
+window.location.replace('/login')
+}else{
+await request('/users/@me', 'G', {}, {authorization: localStorage.getItem('token')})
+}}
+
+s()
+
+</script>

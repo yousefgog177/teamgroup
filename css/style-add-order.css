@@ -1,0 +1,134 @@
+body {
+  background-color:#fff;
+}
+
+
+.box {
+width: 30%;
+  height:950px;
+  margin-left:405px;
+  background-color: #343434!important;
+  border-radius:10px;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin-left:505px;
+  margin-top:0px;
+  bottom:0;
+  transition: .5s ease;
+display: block;
+}
+
+.onlineOrOffline {
+position:absolute;
+  color: #B9BBBE;
+  font-size: 24px;
+  top:0;
+  margin-top: 30px;
+  margin-left:22px;
+}
+
+.typeInput {
+width: 40%;
+  height: 50px;
+  padding: 3px 3px 3px 10px;
+  background-color: #313339;
+  box-sizing: border-box;
+  border-radius: 1px;
+  border: solid 1px #25272C;
+  color: white;
+  display: block;
+  resize:none;
+  overflow:hidden;
+  transition: border 0.5s;
+  font-size:10px;
+  margin-left:20px;
+  margin-top:10px;
+  outline: none;
+  border: solid 1px #7289DA;
+}
+.members {
+position:absolute;
+  color: #B9BBBE;
+  font-size: 24px;
+  top:0;
+  margin-top: 120px;
+  margin-left:22px;
+}
+.membersInput {
+width: 40%;
+  height: 50px;
+  padding: 3px 3px 3px 10px;
+  background-color: #313339;
+  box-sizing: border-box;
+  border-radius: 1px;
+  border: solid 1px #25272C;
+  color: white;
+  display: block;
+  resize:none;
+  overflow:hidden;
+  transition: border 0.5s;
+  font-size:10px;
+  margin-left:20px;
+  margin-top:10px;
+  outline: none;
+  border: solid 1px #7289DA;
+}
+.link {
+position:absolute;
+  color: #B9BBBE;
+  font-size: 24px;
+  top:0;
+  margin-top: 220px;
+  margin-left:22px;
+}
+.linkInput {
+width: 40%;
+  height: 50px;
+  padding: 3px 3px 3px 10px;
+  background-color: #313339;
+  box-sizing: border-box;
+  border-radius: 1px;
+  border: solid 1px #25272C;
+  color: white;
+  display: block;
+  resize:none;
+  overflow:hidden;
+  transition: border 0.5s;
+  font-size:10px;
+  margin-left:20px;
+  margin-top:10px;
+  outline: none;
+  border: solid 1px #7289DA;
+}
+.addOrder {
+  position: relative;
+  width: 45%;
+  max-width: 400px;
+}
+
+.addOrder img {
+  width: 50%;
+  height: auto;
+}
+
+.addOrder .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #0002FF;
+  color: black;
+  font-size: 16px;
+  padding: 16px 30px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.addOrder .btn:hover {
+  background-color: black;
+  color: white;
+}
